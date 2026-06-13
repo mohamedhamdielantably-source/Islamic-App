@@ -3,7 +3,7 @@ import google.generativeai as genai
 from google.generativeai import types
 
 # مفتاحك السليم والشغال
-API_KEY = "AQ.Ab8RN6LRt4Y5Pqa5iHfJBZJ2nw4mI00uolG8TempfPNspL7QbA"
+API_KEY = "AQ.Ab8RN6LRt4Y5Pqa5iHfJBZJ2nw4mI00uolG8TempfPNspL7QbA."
 
 chat_box = None
 user_input = None
