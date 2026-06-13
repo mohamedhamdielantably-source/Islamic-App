@@ -1,3 +1,4 @@
 streamlit
 flet
 google-generativeai
+pillow
