@@ -1,2 +1,3 @@
 Streamlit
 flet
+googel-generativeai
