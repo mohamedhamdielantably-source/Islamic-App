@@ -1,5 +1,9 @@
-import flet as ft
+import streamlit as st
 import google.generativeai as genai
+
+# هنا السطر اللي بيجيب المفتاح من الـ Secrets اللي إحنا حفظناها
+API_KEY = st.secrets["API_KEY"]
+genai.configure(api_key=API_KEY)
 from google.generativeai import types
 
 # مفتاحك السليم والشغال
