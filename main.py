@@ -3,13 +3,14 @@ import google.generativeai as genai
 from google.generativeai import types
 
 # مفتاحك السليم والشغال
-API_KEY = "AQ.Ab8RN6LRt4Y5Pqa5iHfJBZJ2nw4mI00uolG8TempfPNspL7QbA."
+import streamlit as st
+API_KEY = st.secrets["API_KEY"]
 
 chat_box = None
 user_input = None
 
 # ربط العميل بالمكتبة الرسمية
-client = genai.Client(api_key=API_KEY)
+genai.configure(api_key=API_KEY)
 
 def send_message(e):
     page = e.page if e.page else e.control.page
