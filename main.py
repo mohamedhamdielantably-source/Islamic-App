@@ -1,41 +1,26 @@
 import streamlit as st
-import google.generativeai as genai
 
-# إعداد مفتاح الـ API
-try:
-    API_KEY = st.secrets["API_KEY"]
-    genai.configure(api_key=API_KEY)
-except Exception as e:
-    st.error("خطأ في إعدادات API Key.")
-    st.stop()
+st.set_page_config(page_title="تطبيقي الإسلامي", page_icon="🕌")
 
 st.title("تطبيق إسلامي ذكي 🕌")
-st.write("أهلاً بك! أنا مساعدك الذكي، اسألني في أي شيء ديني وسأجيبك.")
+st.write("أهلاً بك يا زهرة! هذا التطبيق مصمم خصيصاً لكِ ليكون رفيقاً إيمانياً.")
 
-# تهيئة سجل المحادثة
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+# تقسيم التطبيق لأجزاء
+tab1, tab2, tab3 = st.tabs(["أذكار الصباح", "أدعية مختارة", "عن المطور"])
 
-# عرض الرسائل السابقة
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+with tab1:
+    st.subheader("أذكار الصباح")
+    st.write("• سبحان الله وبحمده (100 مرة)")
+    st.write("• آية الكرسي")
+    st.write("• المعوذات")
 
-# استقبال سؤال المستخدم
-if prompt := st.chat_input("اكتب سؤالك هنا..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
+with tab2:
+    st.subheader("أدعية مختارة")
+    st.write("• 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ'")
+    st.write("• 'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ'")
 
-    # توليد الرد مع تعليمات خاصة باسمك
-    with st.chat_message("assistant"):
-        try:
-            model = genai.GenerativeModel(
-                model_name='gemini-1.5-flash',
-                system_instruction="أنت مساعد ذكي متخصص في العلوم الإسلامية. إذا سألك المستخدم من صممك أو من مطورك، أجب بكل فخر: 'لقد صممني البشمهندس محمد حمدي'."
-            )
-            response = model.generate_content(prompt)
-            st.markdown(response.text)
-            st.session_state.messages.append({"role": "assistant", "content": response.text})
-        except Exception as e:
-            st.error("عذراً، حدث خطأ أثناء التواصل مع الذكاء الاصطناعي.")
+with tab3:
+    st.subheader("معلومات عن التطبيق")
+    st.write("تم تصميم هذا التطبيق بكل حب وفخر بواسطة:")
+    st.title("البشمهندس محمد حمدي")
+    st.balloons()
