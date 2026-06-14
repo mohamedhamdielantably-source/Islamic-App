@@ -1,35 +1,51 @@
 import streamlit as st
 import google.generativeai as genai
 
-# إعداد الـ API
+# إعداد واجهة التطبيق
+st.set_page_config(page_title="تطبيقي الإسلامي", page_icon="🕌")
+st.title("تطبيق إسلامي ذكي 🕌")
+
+# إعداد مفتاح الـ API بأمان
 if "API_KEY" in st.secrets:
-    genai.configure(api_key=st.secrets["API_KEY"])
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    try:
+        genai.configure(api_key=st.secrets["API_KEY"])
+        model = genai.GenerativeModel('gemini-1.5-flash')
+    except Exception as e:
+        st.error("حدث خطأ في الاتصال بخدمة الذكاء الاصطناعي.")
+        st.stop()
 else:
-    st.error("خطأ: مفتاح الـ API غير موجود في الـ Secrets.")
+    st.error("مفتاح الـ API غير موجود في إعدادات التطبيق (Secrets).")
     st.stop()
 
-st.title("تطبيق إسلامي ذكي 🕌")
-st.write("أهلاً يا زهرة، اسأليني أي سؤال وسأجيبك.")
-
-# تهيئة الشات
+# تهيئة سجل المحادثة
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# عرض الرسائل
+# عرض الرسائل السابقة في الشات
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# إرسال الرسالة
+# استقبال سؤال المستخدم
 if prompt := st.chat_input("اكتب سؤالك هنا..."):
+    # إضافة سؤال المستخدم للشاشة
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
+    # توليد الرد
     with st.chat_message("assistant"):
-        # الرد باسمك
-        full_prompt = f"أنت مساعد إسلامي ذكي، صممك البشمهندس محمد حمدي. السؤال هو: {prompt}"
-        response = model.generate_content(full_prompt)
-        st.markdown(response.text)
-        st.session_state.messages.append({"role": "assistant", "content": response.text})
+        try:
+            # التحقق من سؤال التعريف بالمطور
+            if "مين" in prompt and ("صممك" in prompt or "مطورك" in prompt or "صمم" in prompt):
+                response_text = "لقد صممني البشمهندس محمد حمدي، وأنا هنا لمساعدتك في أي استفسارات دينية."
+            else:
+                # الرد الذكي من Gemini
+                response = model.generate_content(prompt)
+                response_text = response.text
+            
+            st.markdown(response_text)
+            st.session_state.messages.append({"role": "assistant", "content": response_text})
+            
+        except Exception as e:
+            st.error("عذراً، حدث خطأ أثناء التواصل مع الذكاء الاصطناعي، يرجى المحاولة مرة أخرى.")
