@@ -2,16 +2,14 @@ import streamlit as st
 
 st.set_page_config(page_title="تطبيقي الإسلامي", page_icon="🕌")
 st.title("تطبيق إسلامي ذكي 🕌")
-st.write("أهلاً بك! أنا هنا للإجابة على أسئلتك الدينية.")
 
-# قاعدة بيانات الأسئلة والأجوبة (تقدر تضيف فيها اللي إنت عايزه)
+# 1. قائمة الأسئلة المبرمجة (القاعدة الثابتة)
 data = {
-    "أركان الإسلام": "أركان الإسلام خمسة: شهادة أن لا إله إلا الله وأن محمداً رسول الله، إقام الصلاة، إيتاء الزكاة، صوم رمضان، وحج البيت لمن استطاع إليه سبيلاً.",
-    "من صممك": "لقد صممني البشمهندس محمد حمدي، المبرمج المبدع.",
-    "كيف أتوب": "التوبة هي الرجوع إلى الله، وشروطها: الإقلاع عن الذنب، الندم عليه، والعزم على عدم العودة."
+    "أركان الإسلام": "أركان الإسلام خمسة: الشهادتان، الصلاة، الزكاة، الصوم، والحج.",
+    "من صممك": "صمم هذا التطبيق البشمهندس محمد حمدي ليكون رفيقاً إيمانياً.",
+    "أركان الإيمان": "الإيمان بالله، وملائكته، وكتبه، ورسله، واليوم الآخر، والقدر خيره وشره."
 }
 
-# الشات
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -19,13 +17,21 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("اكتب سؤالك (مثلاً: أركان الإسلام):"):
+if prompt := st.chat_input("اكتب سؤالك هنا..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
-        # الرد من قاعدة البيانات
-        response_text = data.get(prompt, "عذراً، أنا حالياً أجيب عن الأسئلة المبرمجة فقط. سأتعلم المزيد قريباً!")
-        st.markdown(response_text)
+        # البحث في الأسئلة المبرمجة
+        response_text = data.get(prompt, None)
+        
+        if response_text:
+            st.markdown(response_text)
+        else:
+            # الحل الوسط: لو مش عارف السؤال، يوجهه ليك!
+            st.markdown("عذراً، هذا السؤال يحتاج لمراجعة دقيقة. هل تود إرسال سؤالك مباشرة للبشمهندس محمد حمدي؟")
+            st.link_button("إرسال السؤال للبشمهندس محمد", "https://wa.me/201009218581") # حط رقم الواتساب بتاعك هنا
+            response_text = "تم توجيه المستخدم للمطور."
+            
         st.session_state.messages.append({"role": "assistant", "content": response_text})
